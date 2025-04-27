@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  laravel:
+    build:
+      context: .
+      dockerfile: Dockerfile.laravel
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - fastapi
+    environment:
+      FASTAPI_URL: http://fastapi:5000
+
+  fastapi:
+    build:
+      context: ./api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./api/downloads:/app/downloads
+    environment:
+      - PYTHONUNBUFFERED=1
+
+networks:
+  default:
+    name: yt-downloader-network
+    driver: bridge
