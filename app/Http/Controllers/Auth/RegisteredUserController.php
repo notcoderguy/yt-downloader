@@ -18,8 +18,11 @@ class RegisteredUserController extends Controller
     /**
      * Show the registration page.
      */
-    public function create(): Response
+    public function create(): Response|RedirectResponse
     {
+        if (User::count() > 0) {
+            return redirect()->route('login')->with('error', 'Registration is disabled');
+        }
         return Inertia::render('auth/register');
     }
 
@@ -30,6 +33,10 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (User::count() > 0) {
+            return back()->withErrors(['error' => 'Registration is disabled']);
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
