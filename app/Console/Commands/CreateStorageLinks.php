@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 class CreateStorageLinks extends Command
 {
     protected $signature = 'storage:links:custom';
+
     protected $description = 'Create custom storage links for downloads';
 
     public function handle()
@@ -16,12 +17,13 @@ class CreateStorageLinks extends Command
         $target = storage_path('app/private/downloads');
         $link = base_path('api/downloads');
 
-        if (!file_exists($target)) {
+        if (! file_exists($target)) {
             File::makeDirectory($target, 0755, true);
         }
 
         if (file_exists($link)) {
             $this->error("The link [$link] already exists.");
+
             return;
         }
 
