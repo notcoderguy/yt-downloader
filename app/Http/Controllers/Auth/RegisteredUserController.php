@@ -23,6 +23,7 @@ class RegisteredUserController extends Controller
         if (User::count() > 0) {
             return redirect()->route('login')->with('error', 'Registration is disabled');
         }
+
         return Inertia::render('auth/register');
     }
 
