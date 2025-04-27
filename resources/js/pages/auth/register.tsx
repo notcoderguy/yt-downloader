@@ -1,6 +1,7 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useEffect } from 'react';
+import { toast } from 'sonner';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -17,7 +18,7 @@ type RegisterForm = {
 };
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
+    const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm> & { error?: string }>({
         name: '',
         email: '',
         password: '',
@@ -30,6 +31,12 @@ export default function Register() {
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
+
+    useEffect(() => {
+        if (errors?.error) {
+            toast.error(errors.error);
+        }
+    }, [errors]);
 
     return (
         <AuthLayout title="Create an account" description="Enter your details below to create your account">
